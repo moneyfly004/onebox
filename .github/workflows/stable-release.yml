@@ -72,7 +72,7 @@ jobs:
       - name: Download Binaries
         run: bun run scripts/download-binaries.ts
 
-      - name: Generate Signing Key (if not exists)
+      - name: Generate Signing Key and Update Config
         id: generate_key
         run: |
           if [ -z "${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}" ]; then
@@ -80,10 +80,21 @@ jobs:
             npm install -g @tauri-apps/cli
             tauri signer generate -w ./temp_signing_key.key
             PRIVATE_KEY=$(cat ./temp_signing_key.key)
+            PUBLIC_KEY=$(cat ./temp_signing_key.key.pub)
+            
+            # 更新 tauri.conf.json 中的 pubkey
+            if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "win32" || -n "$WINDIR" ]]; then
+              # Windows
+              node -e "const fs=require('fs');const config=JSON.parse(fs.readFileSync('src-tauri/tauri.conf.json','utf8'));config.plugins.updater.pubkey='$PUBLIC_KEY';fs.writeFileSync('src-tauri/tauri.conf.json',JSON.stringify(config,null,2));"
+            else
+              # Linux/macOS
+              node -e "const fs=require('fs');const config=JSON.parse(fs.readFileSync('src-tauri/tauri.conf.json','utf8'));config.plugins.updater.pubkey='$PUBLIC_KEY';fs.writeFileSync('src-tauri/tauri.conf.json',JSON.stringify(config,null,2));"
+            fi
+            
             echo "private_key<<EOF" >> $GITHUB_OUTPUT
             echo "$PRIVATE_KEY" >> $GITHUB_OUTPUT
             echo "EOF" >> $GITHUB_OUTPUT
-            echo "✅ Key generated successfully"
+            echo "✅ Key generated and config updated successfully"
           else
             echo "Using existing private key from secrets"
             echo "private_key=${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}" >> $GITHUB_OUTPUT
