@@ -1,0 +1,148 @@
+
+
+
+/*  Window Customization CSS start
+https://v2.tauri.app/learn/window-customization/ 
+*/
+.titlebar {
+  height: 30px;
+  background: #f8f8f8;
+  user-select: none;
+  display: flex;
+  justify-content: flex-start;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding-left: 12px; /* 添加左侧内边距 */
+  gap: 8px; /* 按钮之间的间距 */
+}
+
+.titlebar-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 12px;
+  height: 12px;
+  margin-top: 9px; /* 垂直居中 */
+  border-radius: 50%;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#titlebar-close {
+  background-color: #ff5f57;
+}
+
+#titlebar-minimize {
+  background-color: #febc2e;
+}
+
+#titlebar-maximize {
+  color: #e3e3e3;
+  background: #e3e3e3;
+  background-color: #e3e3e3;
+  
+}
+
+
+
+.titlebar-button svg {
+  width: 8px;
+  height: 8px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+
+
+.titlebar-button:hover svg {
+  opacity: 1 !important;
+}
+/* Window Customization CSS end */
+
+
+/* 完全隐藏滚动条 - 所有浏览器兼容方案 */
+/* Webkit 浏览器 (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  display: none !important;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: none !important;
+}
+
+/* IE 和 Edge Legacy */
+* {
+  -ms-overflow-style: none !important;
+}
+
+/* 确保滚动功能仍然有效 */
+.overflow-auto,
+.overflow-scroll,
+.overflow-y-auto,
+.overflow-x-auto,
+.overflow-y-scroll,
+.overflow-x-scroll {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Apple 风格动画和样式 */
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 自定义滚动条样式 */
+.scrollbar-light::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-light::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-light::-webkit-scrollbar-thumb {
+  background-color: rgba(156, 163, 175, 0.3);
+  border-radius: 20px;
+}
+
+.scrollbar-light::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(156, 163, 175, 0.5);
+}
+
+.scrollbar-dark::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-dark::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-dark::-webkit-scrollbar-thumb {
+  background-color: rgba(75, 85, 99, 0.3);
+  border-radius: 20px;
+}
+
+.scrollbar-dark::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(75, 85, 99, 0.5);
+}
+
+@import "tailwindcss";
+@plugin "daisyui" {
+   themes: light --default, light --prefersdark;
+ }
+
+:root { text-autospace: normal; }
