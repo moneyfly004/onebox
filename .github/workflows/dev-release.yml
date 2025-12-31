@@ -100,12 +100,13 @@ jobs:
             echo "private_key<<EOF" >> $GITHUB_OUTPUT
             echo "$PRIVATE_KEY" >> $GITHUB_OUTPUT
             echo "EOF" >> $GITHUB_OUTPUT
+            echo "✅ Key generated successfully"
           else
             echo "Using existing private key from secrets"
             echo "private_key=${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}" >> $GITHUB_OUTPUT
           fi
         shell: bash
-        continue-on-error: true
+        continue-on-error: false
 
       - name: Build and Release with Tauri Action
         uses: tauri-apps/tauri-action@v0
