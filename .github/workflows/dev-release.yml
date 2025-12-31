@@ -89,10 +89,32 @@ jobs:
       - name: Download Binaries
         run: bun run scripts/download-binaries.ts
 
+      - name: Generate Signing Key (if not exists)
+        id: generate_key
+        run: |
+          if [ -z "${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}" ]; then
+            echo "No private key found, generating new key pair..."
+            bunx @tauri-apps/cli signer generate -w ./temp_signing_key.key
+            PRIVATE_KEY=$(cat ./temp_signing_key.key)
+            PUBLIC_KEY=$(cat ./temp_signing_key.key.pub)
+            echo "private_key<<EOF" >> $GITHUB_OUTPUT
+            echo "$PRIVATE_KEY" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+            echo "public_key<<EOF" >> $GITHUB_OUTPUT
+            echo "$PUBLIC_KEY" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          else
+            echo "Using existing private key from secrets"
+            echo "private_key=${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}" >> $GITHUB_OUTPUT
+          fi
+        shell: bash
+        continue-on-error: true
+
       - name: Build and Release with Tauri Action
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ steps.generate_key.outputs.private_key || secrets.TAURI_SIGNING_PRIVATE_KEY }}
         with:
           tagName: "dev"
           releaseName: "Dev"
