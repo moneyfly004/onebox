@@ -35,24 +35,16 @@ GitHub Actions 会自动提供 `GITHUB_TOKEN`，**你不需要手动设置**。�
 - 上传构建产物
 - 创建 Tag
 
-### **可选：macOS 签名和公证（仅 macOS 需要）**
+### **Windows 构建（当前配置）**
 
-如果你需要为 macOS 应用签名和公证，需要设置以下 Secrets：
+当前工作流已配置为**只构建 Windows 版本**，因此：
 
-1. 进入仓库：`https://github.com/moneyfly004/onebox/settings/secrets/actions`
-2. 添加以下 Secrets（仅 macOS 需要）：
+✅ **不需要设置任何 Token 或 Secrets**
+- `GITHUB_TOKEN` 自动提供
+- 不需要 macOS 签名相关的 secrets
+- 不需要 Apple 开发者账号
 
-```
-TAURI_PRIVATE_KEY          # Tauri 签名私钥
-APPLE_CERTIFICATE          # Apple 开发者证书（Base64 编码）
-APPLE_CERTIFICATE_PASSWORD # 证书密码
-APPLE_API_KEY              # Apple API Key ID
-APPLE_API_ISSUER           # Apple API Issuer ID
-APPLE_AUTH_KEY             # Apple API Key 内容（.p8 文件内容）
-KEYCHAIN_PASSWORD          # Keychain 密码
-```
-
-**注意**：如果只是测试构建，或者只构建 Windows/Linux 版本，**不需要设置这些 secrets**。
+**注意**：如果需要构建 macOS 或 Linux 版本，需要修改工作流文件并添加相应的 secrets。
 
 ## 🚀 构建方式
 
